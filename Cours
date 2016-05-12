@@ -1,1 +1,189 @@
 /* Cours Réseaux S4 */
+
+
+// Intro
+
+    Administration des sytèmes :
+
+    Ensemble des moyens humains, techniques et finaciers mis en oeuvre pour :
+        - le contrôle
+        - la coordination
+        - la sureveillance
+        - la protection / securisation
+        des ressources infomratique de l'entreprise
+
+    Ces tâches sont confiées à un Administrateur.
+
+    Périmètre d'action de l'administrateur :
+        - ordinateur et système d'exploitation (Windows, Linxw ...)
+        - réseaux (Ethernet, TCP/IP, ... )
+        - serveur (web, messagerie, ftp ...)
+        - applications (base de données, applications métiers ... )
+        - Utilisateur (identifiacation, privilèges, devoirs)
+        - ...
+
+    Principale activité de l'admin :
+
+        1. La surveillance :
+            - collecte
+            - analyse (pour envisager des actions en réponse)
+            - réaction
+            - stockage / archivage
+
+        --> Principaux outils ou commandes disponible pour la surveillance
+
+        2. La maintenance préventive :
+            - diminuer les pannes poru réduire les coûts de la maintenance curativer
+            - prolonger la durée de vie du matériel
+            - améliorer la sécurité et la fiabilité
+
+           La maintenance curative :
+                retrouver les porblèmes réseaux à partir des anomalies signalées et les associer au bon matèriel ou logiciel
+
+                --> Comment utiliser ces outils dans les tâcehs de maintenance ?
+
+        3. La sécurisation :
+            - sécurisation du système (compte utilisateurs) ...
+            - sécurisation des données (cryptage, ...)
+            - diffusion des infos de sécurité
+            - audit.
+
+        Rappels : Principaux risques encourus par les systèmes
+
+            1. Ecoute    : interception des infos qui circulent sur le réseau
+            2. Balayage  : recherche de machine vulnerables
+            3. Fouille   : récupération de fichiers de travail sur une machine donnée
+            4. Infection : Introduction d'application malveillantes (virus ...)
+            5. Blocage de système : (Dos : "denis de service")
+
+        Principales technologies de défense
+
+            Protection contre les intrusions (Firewalls, anti-virus, Anti-spyware, Anti Spam, Suppression des fichiers de travail)
+            Sauvegarde de données
+            Bonnes pratiques
+            ...
+
+            --> Comment mettre en oeuvre les différentes techniques de cryptage de données ?
+
+
+// Cryptage des données
+
+    Pourquoi crypter les données ? pour les rendre incompréhenseibles
+
+    Le chiffrement (ou cryptage) s'appuie sur des clés spécifiques que l'on utilise pour le cryptage et pour le décryptage
+
+    Source ----message clair----> Codeur ----message codé----> Décodeur ----message clair----> Desination
+
+// Technique de base du cryptage
+
+    // Subtstitution Monoalphabétique
+
+        Décalage simple = remplacer chaque lettre du message pas une lettre correspondant à un certain décalage dans l'alp^habet
+
+        exemple : message à coder = message
+                  décalage        = 2
+                  message codé    = oguucig
+
+
+    // Transposition simple
+
+        Méthode 1 = modifier la position des caractères du message
+
+        Exemple :   1  2  3  4
+                    m  e  s  s
+                    a  g  e
+                    ==> lecture en colonne => maegses
+
+        Les algo de cryptage utilisent els technique de base : substitution et permutation.
+        Remarque : le "ou exclusif" est souvent utilisé comme opréteur de substitution :
+
+        Exemple
+
+            Message clair : 1 1 0 0 1 1 0 0 1 1
+            Clé           : 1 1 1 1 0 0 0 0 1 1
+            Message codé  : 0 0 1 1 1 1 0 0 0 0
+            Clé           : 1 1 1 1 0 0 0 0 1 1
+            Message décodé: 1 1 0 0 1 1 0 0 1 1
+
+        Le principe de base du cryptage consiste à découper le message en bloc de taille fixe (64, 128, 192 bits ...)
+        puis à code ou décoder chaque bloc à partir d'une même clé.
+
+        On nomme cette technique : Cryptage symétrique ou à clé secrète
+
+
+    // Algorithme de cryptage
+
+        IDEA    Algorithme suisse, très rapide et pouvant aller jusqu'a des clés de 128 bits
+
+        DES     C'est le standard industriel et le plus utilisé de tous les algo. Utilise des clés 56 bits
+
+        Le tripleDES (3DES) est en fait l'algorithme DES appliqué trois fois sur les données.
+
+
+        Les différences en tre les algo viennent :
+            - de l'ordre et du nombre de transformations
+            - de la gestion de la clé
+
+        ... schéma dafock
+
+
+    // Principe de DES
+
+        ... schéma dafock
+
+
+    // Programmation du DES en JAVA
+        Il existe des API, permettant d'utiliser le codeage DES, dans la plus part des languages de programmation.
+
+        Sous Java 2 packages sécurité sont disponibles :
+            Java.security.*
+            Java.crypto.*
+
+            Permettennt de crypter n'importe quelle donnée avec l'algo de son choix
+            Ils implémentent les algo de cryptage (DES, IDES, RC2, RC4, SHA-1, MD2, MD5, ...)
+
+        La classe KeyGenerator : cette classe génére une clé secrète aléatoire
+
+            les méthodes :
+                - KeyGenerator.getInstance() : active le generateur de clé
+                - KeGenerator.inti()         : initialise le générateur
+                - KeyGenerator.generateKey() : calcule la clé
+
+
+        La classe Cipher : cette classe permet de realiser le cryptage et le déryptage des donées
+
+            Les méthodes:
+                - Cipher.getInstance()  : permet de choisir un algo de cryptage
+                - Cipher.init()         : défini le mode d'utilisation (Cryptage ou Décryptage) et la clé
+                - Ciphet.doFinal()      : crypte et renvoi le texte codé
+
+
+            Exemple :
+
+                ...
+
+    // Résistance au "cassage"
+
+        La méthode la plus classique est de trouver la clé en essayant toutes les combinaisons possibles.
+
+        DES : Pour une clé sur 40 bits il y a 2^40 combinaisons possibles.
+              Il existe des cartes capables de tester 200 millions de clés pas seconde.
+              La clé peut être cassée en 10 heures.
+              Pour 52 bits c'est un peu plus long
+              Un ordinateur très puissant mettre 0,07 secondes.
+
+        IDEA : Pour une clé à 128 bits il faut à peut près 2.2 x 10^24 secondes, soit 6000 années avec la carte précédente
+               Quelques dizaines de minutes avec de gros ordinateurs.
+
+
+    // Limites du DES
+
+        Il est nécessaite de protéger cette clé contre toute interception ou bien trouver un autre type de cryptage polus sécurisé
+
+        L'idée est de ne jamais échanger la clé de décryptage
+
+        --> On va utiliser un système de décodage qui utilise 2 clés
+            - Une pour coder,
+            - Une différente poru décoder
+
+        --> Codage asymétrique (RSA)
